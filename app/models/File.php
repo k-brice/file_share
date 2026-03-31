@@ -71,9 +71,22 @@ class File {
     /**
      * Delete a file record by ID and user_id (for security)
      */
-    public function delete($id, $userId) {
-        $sql = "DELETE FROM files WHERE id = :id AND user_id = :user_id";
+    /**
+     * Delete a file record globally (for Admin)
+     */
+    public function deleteGlobal($id) {
+        $sql = "DELETE FROM files WHERE id = :id";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([':id' => $id, ':user_id' => $userId]);
+        return $stmt->execute([':id' => $id]);
+    }
+
+    /**
+     * Get system-wide stats
+     */
+    public function getSystemStats() {
+        $stats = [];
+        $stats['total_files'] = $this->db->query("SELECT COUNT(*) FROM files")->fetchColumn();
+        $stats['total_size'] = $this->db->query("SELECT SUM(file_size) FROM files")->fetchColumn();
+        return $stats;
     }
 }

@@ -24,8 +24,16 @@ function getDatabaseConnection() {
             `name` VARCHAR(255) NOT NULL,
             `email` VARCHAR(255) UNIQUE NOT NULL,
             `password` VARCHAR(255) NOT NULL,
+            `role` ENUM('user', 'admin') DEFAULT 'user',
             `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        // Migration: Check for 'role' column
+        try {
+            $pdo->query("SELECT role FROM users LIMIT 1");
+        } catch (Exception $e) {
+            $pdo->exec("ALTER TABLE users ADD COLUMN role ENUM('user', 'admin') DEFAULT 'user' AFTER password");
+        }
 
         // Migration: Check for 'name' column (it might be 'fullname' from the old project)
         try {
@@ -38,6 +46,20 @@ function getDatabaseConnection() {
             } catch (Exception $e2) {
                 $pdo->exec("ALTER TABLE users ADD COLUMN name VARCHAR(255) NOT NULL AFTER id");
             }
+        }
+
+        // Seed: Default Admin Account
+        $adminEmail = 'admin@gmail.com';
+        $adminPass  = password_hash('admin123', PASSWORD_DEFAULT);
+        $checkAdmin = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+        $checkAdmin->execute([$adminEmail]);
+        
+        if (!$checkAdmin->fetch()) {
+            $pdo->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)")
+                ->execute(['k-brice', $adminEmail, $adminPass, 'admin']);
+        } else {
+            $pdo->prepare("UPDATE users SET name = 'k-brice', role = 'admin' WHERE email = ?")
+                ->execute([$adminEmail]);
         }
 
         // Files Table

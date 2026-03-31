@@ -27,6 +27,7 @@ class AuthController {
         
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['name'];
+        $_SESSION['user_role'] = $user['role'];
         return true;
     }
 
@@ -38,9 +39,21 @@ class AuthController {
         return isset($_SESSION['user_id']);
     }
 
+    public static function isAdmin() {
+        return (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
+    }
+
     public static function requireLogin() {
         if (!self::isLoggedIn()) {
             header("Location: login.php");
+            exit;
+        }
+    }
+
+    public static function requireAdmin() {
+        self::requireLogin();
+        if (!self::isAdmin()) {
+            header("Location: index.php");
             exit;
         }
     }

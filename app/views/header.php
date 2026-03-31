@@ -20,6 +20,9 @@
 
             <nav class="nav-links" id="navLinks">
                 <?php if (isset($_SESSION['user_id'])): ?>
+                    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                        <a href="admin_dashboard.php" style="color: var(--primary);">Admin Panel</a>
+                    <?php endif; ?>
                     <a href="index.php">History</a>
                     <a href="profile.php">My Profile</a>
                     <a href="upload.php" class="btn btn-secondary" style="padding: 0.5rem 1.2rem;">+ Upload</a>

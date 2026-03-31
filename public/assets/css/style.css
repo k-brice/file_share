@@ -206,6 +206,62 @@ footer {
 .alert-success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
 .alert-error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
 
+/* Drag & Drop Zone */
+.drop-zone {
+    width: 100%;
+    min-height: 200px;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.drop-zone.hover {
+    border-color: var(--primary);
+    background: rgba(197, 160, 89, 0.05);
+    transform: scale(1.02);
+}
+
+.drop-zone i { font-size: 3rem; margin-bottom: 1rem; color: var(--primary); }
+.drop-zone p { color: var(--text-muted); font-size: 0.9rem; }
+.drop-zone input { display: none; }
+
+/* Progress Bar */
+.progress-container {
+    display: none;
+    margin-top: 2rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50px;
+    height: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--gold-gradient);
+    transition: width 0.1s linear;
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+}
+
+.status-text {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--primary);
+    text-align: center;
+    display: none;
+}
+
 /* Mobile Menu Button */
 .menu-btn {
     display: none;
